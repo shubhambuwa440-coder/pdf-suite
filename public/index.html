@@ -1,0 +1,48 @@
+const express = require('express');
+const multer = require('multer');
+const { PDFDocument, degrees } = require('pdf-lib');
+const fs = require('fs-extra');
+const path = require('path');
+
+const app = express();
+const upload = multer({ dest: 'uploads/' });
+
+app.use(express.static('public'));
+
+// 1. Merge PDFs Tool
+app.post('/merge', upload.array('files'), async (req, res) => {
+    try {
+        const mergedPdf = await PDFDocument.create();
+        for (const file of req.files) {
+            const pdfBytes = fs.readFileSync(file.path);
+            const pdf = await PDFDocument.load(pdfBytes);
+            const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+            copiedPages.forEach((page) => mergedPdf.addPage(page));
+        }
+        const pdfBytes = await mergedPdf.save();
+        const outputPath = path.join(__dirname, 'uploads', `merged-${Date.now()}.pdf`);
+        fs.writeFileSync(outputPath, pdfBytes);
+        res.download(outputPath, () => fs.removeSync(outputPath));
+    } catch (err) {
+        res.status(500).send("Error merging");
+    }
+});
+
+// 2. Rotate PDF Tool
+app.post('/rotate', upload.single('files'), async (req, res) => {
+    try {
+        const pdfBytes = fs.readFileSync(req.file.path);
+        const pdfDoc = await PDFDocument.load(pdfBytes);
+        const pages = pdfDoc.getPages();
+        pages.forEach(page => page.setRotation(degrees(90)));
+        const pdfSave = await pdfDoc.save();
+        const outPath = path.join(__dirname, 'uploads', `rotated-${Date.now()}.pdf`);
+        fs.writeFileSync(outPath, pdfSave);
+        res.download(outPath, () => fs.removeSync(outPath));
+    } catch (err) {
+        res.status(500).send("Error rotating");
+    }
+});
+
+const PORT = 3000;
+app.listen(PORT, () => console.log(`🚀 Server running: http://localhost:${PORT}`));
