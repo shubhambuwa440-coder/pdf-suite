@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDFFlow | All-in-One PDF Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-50 font-sans">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 px-6 py-4 flex justify-between items-center transition-all">
+        <div class="text-2xl font-bold bg-gradient-to-r from-red-500 to-orange-600 bg-clip-text text-transparent">PDFlow</div>
+        <div class="space-x-8 hidden md:flex font-medium text-gray-600">
+            <a href="#" class="hover:text-red-500 transition-colors">Tools</a>
+            <a href="#" class="hover:text-red-500 transition-colors">Pricing</a>
+            <a href="#" class="hover:text-red-500 transition-colors">Solutions</a>
+        </div>
+        <button class="bg-red-500 text-white px-6 py-2 rounded-full hover:shadow-lg transition-transform hover:scale-105 active:scale-95">Sign Up</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-32 pb-16 px-6 text-center">
+        <h1 data-aos="zoom-out" class="text-5xl md:text-7xl font-extrabold text-slate-900 mb-6 tracking-tight">
+            Every tool you need to <br><span class="text-red-500">work with PDFs.</span>
+        </h1>
+        <p data-aos="fade-up" data-aos-delay="200" class="text-xl text-gray-500 mb-10 max-w-2xl mx-auto">
+            100% Free, secure, and incredibly fast. Merge, split, compress, and convert in seconds.
+        </p>
+    </header>
+
+    <!-- Tools Grid -->
+    <section class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+        <!-- Merge Card -->
+        <div onclick="openTool('Merge')" class="tool-card group bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:border-red-400 cursor-pointer transition-all duration-300 hover:-translate-y-2">
+            <div class="w-16 h-16 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-red-500 group-hover:text-white transition-colors duration-500">
+                <i class="fa-solid fa-layer-group text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Merge PDF</h3>
+            <p class="text-gray-500">Combine multiple PDFs into one document.</p>
+        </div>
+
+        <!-- Rotate Card -->
+        <div onclick="openTool('Rotate')" class="tool-card group bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:border-blue-400 cursor-pointer transition-all duration-300 hover:-translate-y-2">
+            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-500 group-hover:text-white transition-colors duration-500">
+                <i class="fa-solid fa-rotate text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Rotate PDF</h3>
+            <p class="text-gray-500">Rotate your pages to perfect alignment.</p>
+        </div>
+
+        <!-- Word to PDF -->
+        <div class="tool-card group bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:border-purple-400 cursor-pointer transition-all duration-300 hover:-translate-y-2">
+            <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-500 group-hover:text-white transition-colors duration-500">
+                <i class="fa-solid fa-file-word text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Word to PDF</h3>
+            <p class="text-gray-500">Convert .docx files with perfect formatting.</p>
+        </div>
+        
+        <!-- Unlock PDF -->
+        <div class="tool-card group bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:border-orange-400 cursor-pointer transition-all duration-300 hover:-translate-y-2">
+            <div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-orange-500 group-hover:text-white transition-colors duration-500">
+                <i class="fa-solid fa-unlock text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Unlock PDF</h3>
+            <p class="text-gray-500">Remove passwords from protected files.</p>
+        </div>
+    </section>
+
+    <!-- Upload Modal -->
+    <div id="upload-modal" class="fixed inset-0 z-[60] hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl rounded-3xl p-10 relative overflow-hidden">
+            <button onclick="closeModal()" class="absolute top-6 right-6 text-gray-400 hover:text-black">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <h2 id="modal-title" class="text-3xl font-bold mb-6 text-center">Merge PDF</h2>
+            
+            <div id="drop-zone" class="border-3 border-dashed border-gray-200 rounded-3xl py-20 flex flex-col items-center justify-center group transition-all cursor-pointer">
+                <i class="fa-solid fa-cloud-arrow-up text-5xl text-gray-300 mb-4 group-hover:text-red-500 group-hover:-translate-y-2 transition-all"></i>
+                <p class="text-gray-500 mb-4 font-medium">Drag & drop files or click to browse</p>
+                <input type="file" id="file-input" class="hidden" multiple>
+                <button class="bg-slate-900 text-white px-8 py-3 rounded-xl hover:bg-slate-800 transition-colors">Select Files</button>
+            </div>
+
+            <!-- Loading Spinner (Hidden by default) -->
+            <div id="loading-overlay" class="hidden flex flex-col items-center py-10">
+                <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-red-500"></div>
+                <p class="mt-4 text-slate-700 font-bold">Processing your files...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
